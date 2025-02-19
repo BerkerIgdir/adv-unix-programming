@@ -45,7 +45,7 @@ int mdup2(int oldfd, int newfd)
 
   struct stat st;
   // if oldfd is invalid, then the call fails and newfd is not closed.
-  if (fstat(oldfd, &st) != 0)
+  if (fstat(oldfd, &st))
   {
     printf("Error Message: %s\n", strerror(errno));
     return EXIT_FAILURE;
@@ -59,7 +59,7 @@ int mdup2(int oldfd, int newfd)
 
   // if newfd is already open, then it will be closed silently first.
   memset(&st, 0, sizeof(struct stat));
-  if (fstat(newfd, &st) == 0)
+  if (!fstat(newfd, &st))
   {
     close(newfd);
   }
