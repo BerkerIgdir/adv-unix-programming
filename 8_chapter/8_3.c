@@ -1,18 +1,17 @@
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-int pr_exit(int wstatus) {
+int pr_exit(const siginfo_t *infop) {
 
-  if (WIFEXITED(wstatus)) {
-    printf("exited, status=%d\n", WEXITSTATUS(wstatus));
-  } else if (WIFSIGNALED(wstatus)) {
-    printf("killed by signal %d\n", WTERMSIG(wstatus));
-  } else if (WIFSTOPPED(wstatus)) {
-    printf("stopped by signal %d\n", WSTOPSIG(wstatus));
-  } else if (WIFCONTINUED(wstatus)) {
-    printf("continued\n");
+  int wcode = infop->si_code;
+  int wstatus = infop->si_status;
+  if (wcode & CLD_KILLED) {
+    printf("abnormally exited, status = %d\n", wstatus);
+  } else {
+    printf("exited, status = %d\n", wstatus);
   }
 
   return EXIT_SUCCESS;
@@ -20,17 +19,20 @@ int pr_exit(int wstatus) {
 
 int main(int argc, char *argv[]) {
   pid_t pid;
-  int status;
+  siginfo_t infop;
 
   pid = fork();
   if (pid < 0) {
     perror("fork can not be executed\n");
   } else if (pid == 0) {
-    _exit(EXIT_SUCCESS);
+    _exit(11);
   }
 
-  waitpid(pid, &status, 0);
-  pr_exit(status);
+  if (waitid(P_PID, pid, &infop, WEXITED | WSTOPPED)) {
+    perror("waitid error");
+    exit(EXIT_FAILURE);
+  }
+  pr_exit(&infop);
 
   pid = fork();
   if (pid < 0) {
@@ -39,8 +41,11 @@ int main(int argc, char *argv[]) {
     abort();
   }
 
-  waitpid(pid, &status, 0);
-  pr_exit(status);
+  if (waitid(P_PID, pid, &infop, WEXITED | WSTOPPED)) {
+    perror("waitid error");
+    exit(EXIT_FAILURE);
+  }
+  pr_exit(&infop);
 
   return EXIT_SUCCESS;
 }
