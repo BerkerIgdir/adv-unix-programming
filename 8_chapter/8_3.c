@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-int pr_exit(const siginfo_t *infop) {
+static void pr_exit(const siginfo_t *infop) {
 
   int wcode = infop->si_code;
   int wstatus = infop->si_status;
@@ -13,8 +13,6 @@ int pr_exit(const siginfo_t *infop) {
   } else {
     printf("exited, status = %d\n", wstatus);
   }
-
-  return EXIT_SUCCESS;
 }
 
 int main(int argc, char *argv[]) {
