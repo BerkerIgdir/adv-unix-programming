@@ -1,11 +1,4 @@
-#include <errno.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/resource.h>
+#include "../inch.h"
 
 // oldP is not passed as const pointer because it is going to be freed.
 static int *realloc_array(int *oldP, size_t oldSize, size_t newSize)

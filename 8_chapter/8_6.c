@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../inch.h" 
 
 static pid_t create_zombi() {
   pid_t pid = fork();

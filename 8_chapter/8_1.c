@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../inch.h"
 
 int globvar = 6; /* external variable in initialized data */
 int main(void) {

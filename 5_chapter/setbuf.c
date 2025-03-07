@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "../inch.h"
 
 // setbuf == setvbuf(stream, buf ? fullbuf : nobuff, size)
 int m_setbuf(FILE* restrict stream, char* restrict buf, int mode, size_t size){

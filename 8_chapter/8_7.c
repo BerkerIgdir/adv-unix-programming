@@ -1,8 +1,4 @@
-#include <dirent.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
+#include "../inch.h"
 
 static void open_dir(const char *const path) {
   DIR *dir = opendir(path);

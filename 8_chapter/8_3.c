@@ -1,8 +1,4 @@
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
+#include "../inch.h"
 
 static void pr_exit(const siginfo_t *infop) {
 
